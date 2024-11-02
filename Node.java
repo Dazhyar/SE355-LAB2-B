@@ -8,6 +8,7 @@ public class Node {
     private InetAddress ipAddr;
     private int portNumber;
     private int receivedNumberMessage;
+    public int timeStamp = 0;
 
     // Constructor to initialize a Node with a specific IP address and port number
     public Node(String ipAddr, int portNumber) {
@@ -55,7 +56,11 @@ public class Node {
     public void sendNumber(String serverIPAddr, int serverPortNumber, int number) {
         try (Socket client = new Socket(serverIPAddr, serverPortNumber)) {
             OutputStreamWriter osw = new OutputStreamWriter(client.getOutputStream());
+            this.timeStamp++;
+
+            
             osw.write(number + "\n");
+            osw.write(this.timeStamp + "\n");
             osw.flush();
         } catch (Exception e) {
             System.out.println(e);

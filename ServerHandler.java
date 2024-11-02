@@ -15,6 +15,13 @@ public class ServerHandler implements Runnable {
                 BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
                 int receivedNumber = Integer.parseInt(br.readLine());
+                int receivedTimeStamp = Integer.parseInt(br.readLine());
+
+                if (this.node.timeStamp < receivedTimeStamp) {
+                    this.node.timeStamp = receivedTimeStamp + 1;
+                } else {
+                    this.node.timeStamp++;
+                }
 
                 // Forward the received number to node Z if current node is X or Y
                 if (this.node.getPortNumber() == 7000 || this.node.getPortNumber() == 8000) {
@@ -23,7 +30,7 @@ public class ServerHandler implements Runnable {
                 } 
                 // Print the number if it is received by node Z
                 else if (this.node.getPortNumber() == 9000) {
-                    System.out.println("Z: " + receivedNumber);
+                    System.out.println("Z: " + receivedNumber + ". Timestamp: " + this.node.timeStamp);
                 }
             } catch (Exception e) {
                 System.out.println(e);
